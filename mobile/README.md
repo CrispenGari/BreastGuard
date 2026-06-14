@@ -70,41 +70,41 @@ The screenshots are stored in the root project [`screenshots`](./screenshots) fo
 ### Splash and Onboarding
 
 <p align="center">
-  <img src="./screenshots/0.png" alt="BreastGuard splash screen" width="185"/>
-  <img src="./screenshots/1.png" alt="Welcome to BreastGuard onboarding" width="185"/>
-  <img src="./screenshots/2.png" alt="Upload medical images onboarding" width="185"/>
-  <img src="./screenshots/3.png" alt="Real-time screening support onboarding" width="185"/>
-  <img src="./screenshots/4.png" alt="Support not replacement onboarding" width="185"/>
+  <img src="../screenshots/0.png" alt="BreastGuard splash screen" width="185"/>
+  <img src="../screenshots/1.png" alt="Welcome to BreastGuard onboarding" width="185"/>
+  <img src="../screenshots/2.png" alt="Upload medical images onboarding" width="185"/>
+  <img src="../screenshots/3.png" alt="Real-time screening support onboarding" width="185"/>
+  <img src="../screenshots/4.png" alt="Support not replacement onboarding" width="185"/>
 </p>
 
 ### App Lock and Home
 
 <p align="center">
-  <img src="./screenshots/5.png" alt="Getting started app lock prompt" width="195"/>
-  <img src="./screenshots/6.png" alt="BreastGuard home screen" width="195"/>
+  <img src="../screenshots/5.png" alt="Getting started app lock prompt" width="195"/>
+  <img src="../screenshots/6.png" alt="BreastGuard home screen" width="195"/>
 </p>
 
 ### Settings
 
 <p align="center">
-  <img src="./screenshots/7.png" alt="Settings preferences screen" width="195"/>
-  <img src="./screenshots/8.png" alt="Settings support and legal screen" width="195"/>
+  <img src="../screenshots/7.png" alt="Settings preferences screen" width="195"/>
+  <img src="../screenshots/8.png" alt="Settings support and legal screen" width="195"/>
 </p>
 
 ### Image Selection and Prediction
 
 <p align="center">
-  <img src="./screenshots/9.png" alt="Breast image selection screen" width="195"/>
-  <img src="./screenshots/10.png" alt="Gallery image picker" width="195"/>
-  <img src="./screenshots/11.png" alt="Selected breast image screen" width="195"/>
+  <img src="../screenshots/9.png" alt="Breast image selection screen" width="195"/>
+  <img src="../screenshots/10.png" alt="Gallery image picker" width="195"/>
+  <img src="../screenshots/11.png" alt="Selected breast image screen" width="195"/>
 </p>
 
 ### Results and History
 
 <p align="center">
-  <img src="./screenshots/12.png" alt="Breast image result screen" width="195"/>
-  <img src="./screenshots/13.png" alt="Prediction summary screen" width="195"/>
-  <img src="./screenshots/14.png" alt="Recent prediction history screen" width="195"/>
+  <img src="../screenshots/12.png" alt="Breast image result screen" width="195"/>
+  <img src="../screenshots/13.png" alt="Prediction summary screen" width="195"/>
+  <img src="../screenshots/14.png" alt="Recent prediction history screen" width="195"/>
 </p>
 
 ### Tech Stack
