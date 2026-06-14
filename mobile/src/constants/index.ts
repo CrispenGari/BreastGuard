@@ -13,7 +13,13 @@ export const COLORS = {
   transparent: "transparent",
 };
 
-export const PLOT_COLORS = [COLORS.tertiary, COLORS.red];
+export const PLOT_COLORS = [
+  "#333D6D",
+  "#FF6A1C",
+  "#622B14",
+  "#0A7C6E",
+  "#3852B4",
+];
 export const Fonts = {
   "JosefinSans-Bold": require("@/assets/fonts/JosefinSans-Bold.ttf"),
   "JosefinSans-Regular": require("@/assets/fonts/JosefinSans-Regular.ttf"),

@@ -10,6 +10,7 @@ import { useSettingsStore } from "@/src/store/settingsStore";
 import { onFetchUpdateAsync, onImpact, rateApp } from "@/src/utils";
 
 import {
+  Feather,
   Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
@@ -27,16 +28,95 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
-
+import useLocalAuthState from "@/src/hooks/useLocalAuthState";
+import * as LocalAuthentication from "expo-local-authentication";
+import { useDiagnoseHistoryStore } from "@/src/store/diagnoseHistoryStore";
 const Page = () => {
   const { settings, update, restore } = useSettingsStore();
   const tnCBottomSheetRef = React.useRef<BottomSheetModal>(null);
   const ppBottomSheetRef = React.useRef<BottomSheetModal>(null);
   const helpBottomSheetRef = React.useRef<BottomSheetModal>(null);
   const router = useRouter();
+  const { isEnrolled, hasHadWare } = useLocalAuthState();
+  const { clear: clearHistory } = useDiagnoseHistoryStore();
+
+  const lockApp = async () => {
+    if (settings.haptics) {
+      await onImpact();
+    }
+
+    if (!hasHadWare || !isEnrolled)
+      return Alert.alert(
+        APP_NAME,
+        `Make sure that local authentication is enabled for ${APP_NAME}.`,
+        [
+          {
+            text: "OK",
+            style: "default",
+            onPress: async () => {
+              if (settings.haptics) {
+                await onImpact();
+              }
+              update({ ...settings, new: false });
+            },
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+            onPress: async () => {
+              if (settings.haptics) {
+                await onImpact();
+              }
+              update({ ...settings, new: false });
+            },
+          },
+        ],
+        { cancelable: false },
+      );
+
+    const { success } = await LocalAuthentication.authenticateAsync({
+      disableDeviceFallback: true,
+      biometricsSecurityLevel: "strong",
+      cancelLabel: "CANCEL",
+      promptMessage: `Test your Biometrics or PIN before locking ${APP_NAME}.`,
+      requireConfirmation: true,
+    });
+    if (success) {
+      update({ ...settings, lock: !settings.lock, new: false });
+    } else {
+      return Alert.alert(
+        APP_NAME,
+        `Failed to lock ${APP_NAME}.`,
+        [
+          {
+            text: "OK",
+            style: "default",
+            onPress: async () => {
+              if (settings.haptics) {
+                await onImpact();
+              }
+              update({ ...settings, new: false });
+            },
+          },
+          {
+            text: "TRY AGAIN",
+            style: "cancel",
+            onPress: async () => {
+              if (settings.haptics) {
+                await onImpact();
+              }
+              update({ ...settings, new: false });
+            },
+          },
+        ],
+        { cancelable: false },
+      );
+    }
+  };
 
   const clearAllData = () => {
     restore();
+    clearHistory();
   };
 
   return (
@@ -45,7 +125,7 @@ const Page = () => {
         flex: 1,
       }}
       source={IMAGES.background}
-      blurRadius={6}
+      blurRadius={80}
     >
       <ScrollView
         style={{ flex: 1 }}
@@ -57,24 +137,23 @@ const Page = () => {
         <PPBottomSheet ref={ppBottomSheetRef} />
         <HelpBottomSheet ref={helpBottomSheetRef} />
 
-        <Text style={[styles.headerText, { marginTop: 20 }]}>Misc</Text>
+        <Text style={[styles.headerText, { marginTop: 20 }]}>Preferences</Text>
         <Card
           style={{
             marginHorizontal: 10,
             paddingVertical: 10,
             paddingHorizontal: 0,
             maxWidth: "100%",
-            backgroundColor: COLORS.primary,
+            backgroundColor: COLORS.white,
           }}
         >
           <SettingItem
-            onPress={async () => {
-              if (settings.haptics) {
-                await onImpact();
-              }
-              update({ ...settings, haptics: !settings.haptics });
+            hasSwitch
+            onPress={(isOn) => {
+              update({ ...settings, haptics: !!isOn });
             }}
             title={"Haptics"}
+            value={settings.haptics}
             Icon={
               <MaterialCommunityIcons
                 name={settings.haptics ? "vibrate" : "vibrate-off"}
@@ -86,13 +165,12 @@ const Page = () => {
           />
 
           <SettingItem
-            onPress={async () => {
-              if (settings.haptics) {
-                await onImpact();
-              }
-              update({ ...settings, sound: !settings.sound });
+            onPress={(isOn) => {
+              update({ ...settings, sound: !!isOn });
             }}
-            title={"In-App Sounds"}
+            value={settings.sound}
+            hasSwitch
+            title={"Sounds"}
             subTitle={settings.sound ? "ON" : "OFF"}
             Icon={
               <MaterialCommunityIcons
@@ -102,18 +180,40 @@ const Page = () => {
               />
             }
           />
+          <SettingItem
+            onPress={(isOn) => {
+              if (isOn) {
+                lockApp();
+              }
+            }}
+            value={settings.lock}
+            hasSwitch
+            title={"App Lock"}
+            Icon={
+              <MaterialCommunityIcons
+                name={settings.lock ? "fingerprint" : "fingerprint-off"}
+                size={24}
+                color={COLORS.black}
+              />
+            }
+            subTitle={settings.lock ? "ONN" : "OFF"}
+          />
 
           <SettingItem
-            onPress={async () => {
-              if (settings.haptics) {
-                await onImpact();
-              }
-              await onFetchUpdateAsync();
+            onPress={(isOn) => {
+              update({ ...settings, keepHistory: !!isOn });
             }}
-            title={"Check for Updates"}
-            Icon={
-              <MaterialIcons name="update" size={24} color={COLORS.black} />
-            }
+            value={settings.keepHistory}
+            hasSwitch
+            title={"Save History"}
+            labelStyle={{
+              color: COLORS.red,
+            }}
+            subTitleStyle={{
+              color: COLORS.red,
+            }}
+            subTitle={settings.keepHistory ? "ON" : "OFF"}
+            Icon={<Feather name="activity" size={24} color={COLORS.red} />}
           />
         </Card>
 
@@ -126,9 +226,50 @@ const Page = () => {
             paddingVertical: 10,
             paddingHorizontal: 0,
             maxWidth: "100%",
-            backgroundColor: COLORS.primary,
+            backgroundColor: COLORS.white,
           }}
         >
+          <SettingItem
+            onPress={async () => {
+              if (settings.haptics) {
+                await onImpact();
+              }
+              Alert.alert(
+                APP_NAME,
+                `Are you sure you want to history data?`,
+                [
+                  {
+                    text: "YES",
+                    style: "default",
+                    onPress: async () => {
+                      if (settings.haptics) {
+                        await onImpact();
+                      }
+
+                      clearHistory();
+                    },
+                  },
+                  {
+                    text: "NO",
+                    style: "cancel",
+                    onPress: async () => {
+                      if (settings.haptics) {
+                        await onImpact();
+                      }
+                    },
+                  },
+                ],
+                { cancelable: false },
+              );
+            }}
+            labelStyle={{
+              color: COLORS.red,
+            }}
+            title="Clear History"
+            Icon={
+              <MaterialIcons name="clear-all" size={24} color={COLORS.red} />
+            }
+          />
           <SettingItem
             onPress={async () => {
               if (settings.haptics) {
@@ -179,7 +320,7 @@ const Page = () => {
             paddingVertical: 10,
             paddingHorizontal: 0,
             maxWidth: "100%",
-            backgroundColor: COLORS.primary,
+            backgroundColor: COLORS.white,
           }}
         >
           <SettingItem
@@ -189,12 +330,15 @@ const Page = () => {
               }
               await Share.share(
                 {
-                  url: "https://github.com/CrispenGari/iLifaCode",
+                  url: "https://github.com/CrispenGari/BreastGuard",
                   message:
-                    "An app for learning Computer Science: Download at https://github.com/CrispenGari/iLifaCode",
-                  title: "Share iLifaCode with a Friend",
+                    "Breast Cancer Tool: Download at https://github.com/CrispenGari/BreastGuard",
+                  title: "Share BreastGuard with a Friend",
                 },
-                { dialogTitle: "Share iLifaCode", tintColor: COLORS.tertiary },
+                {
+                  dialogTitle: "Share BreastGuard",
+                  tintColor: COLORS.tertiary,
+                },
               );
             }}
             title="Share with a Friend"
@@ -202,7 +346,6 @@ const Page = () => {
               <Ionicons name="heart-outline" size={24} color={COLORS.black} />
             }
           />
-
           <SettingItem
             onPress={async () => {
               if (settings.haptics) {
@@ -210,9 +353,21 @@ const Page = () => {
               }
               await rateApp();
             }}
-            title={"Rate iLifaCode"}
+            title={"Rate BreastGuard"}
             Icon={
               <Ionicons name="star-outline" size={24} color={COLORS.black} />
+            }
+          />{" "}
+          <SettingItem
+            onPress={async () => {
+              if (settings.haptics) {
+                await onImpact();
+              }
+              await onFetchUpdateAsync();
+            }}
+            title={"Check for Updates"}
+            Icon={
+              <MaterialIcons name="update" size={24} color={COLORS.black} />
             }
           />
           <SettingItem
@@ -222,7 +377,7 @@ const Page = () => {
               }
               helpBottomSheetRef.current?.present();
             }}
-            title={"How does iLifaCode work"}
+            title={"How does BreastGuard work"}
             Icon={<Ionicons name="help" size={24} color={COLORS.black} />}
           />
           <SettingItem
@@ -231,11 +386,11 @@ const Page = () => {
                 await onImpact();
               }
               const res = await Linking.canOpenURL(
-                "https://github.com/CrispenGari/iLifaCode/issues",
+                "https://github.com/CrispenGari/BreastGuard/issues",
               );
               if (res) {
                 Linking.openURL(
-                  "https://github.com/CrispenGari/iLifaCode/issues",
+                  "https://github.com/CrispenGari/BreastGuard/issues",
                 );
               }
             }}
@@ -252,7 +407,7 @@ const Page = () => {
             paddingVertical: 10,
             paddingHorizontal: 0,
             maxWidth: "100%",
-            backgroundColor: COLORS.primary,
+            backgroundColor: COLORS.white,
           }}
         >
           <SettingItem

@@ -4,6 +4,27 @@
 
 **BreastGuard** is an honours research project focused on developing a lightweight, explainable, and deployment-oriented deep learning system for **breast cancer image classification**. The project aims to support early breast cancer screening by classifying breast histopathology images as either **benign** or **malignant**.
 
+<p align="center">
+  <a href="https://typescriptlang.org/">
+    <img src="https://img.shields.io/badge/language-TypeScript-blue.svg" alt="Language: TypeScript">
+  </a>
+  <a href="https://www.python.org/">
+    <img src="https://img.shields.io/badge/language-Python-blue.svg" alt="Language: Python">
+  </a>
+  <a href="https://fastapi.tiangolo.com/">
+    <img src="https://img.shields.io/badge/API-FastAPI-green.svg" alt="FastAPI">
+  </a>
+  <a href="https://pytorch.org/">
+    <img src="https://img.shields.io/badge/model-PyTorch-orange.svg" alt="PyTorch">
+  </a>
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT">
+  </a>
+    <a href="https://github.com/crispengari/BreastGuard/actions/workflows/ci.yml">
+    <img src="https://github.com/crispengari/BreastGuard/actions/workflows/ci.yml/badge.svg" alt="CI Status">
+  </a>
+</p>
+
 The study compares three convolutional neural network architectures:
 
 - **MobileNetV3**

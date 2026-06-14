@@ -4,18 +4,22 @@ import { onImpact } from "@/src/utils";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import TnCBottomSheet from "../BottomSheets/TnCBottomSheet";
+import PPBottomSheet from "../BottomSheets/PPBottomSheet";
 
 const Footer = () => {
   const { settings } = useSettingsStore();
   const tnCBottomSheetRef = React.useRef<BottomSheetModal>(null);
   const ppBottomSheetRef = React.useRef<BottomSheetModal>(null);
   return (
-    <View
-      style={{
-        paddingHorizontal: 20,
-      }}
-    >
-      {settings.language === "en" ? (
+    <>
+      <TnCBottomSheet ref={tnCBottomSheetRef} />
+      <PPBottomSheet ref={ppBottomSheetRef} />
+      <View
+        style={{
+          paddingHorizontal: 20,
+        }}
+      >
         <Text
           style={{
             marginBottom: 20,
@@ -51,44 +55,8 @@ const Footer = () => {
           </Text>{" "}
           of this app.
         </Text>
-      ) : (
-        <Text
-          style={{
-            marginBottom: 20,
-            fontSize: 16,
-            textAlign: "center",
-            fontFamily: FONTS.bold,
-            color: COLORS.black,
-          }}
-        >
-          Ngokusebenzisa {APP_NAME}, uyavuma ngokuzenzekelayo{" "}
-          <Text
-            onPress={async () => {
-              if (settings.haptics) {
-                await onImpact();
-              }
-              tnCBottomSheetRef.current?.present();
-            }}
-            style={styles.clickable_text}
-          >
-            Imigaqo neMiqathango
-          </Text>{" "}
-          kunye{" "}
-          <Text
-            onPress={async () => {
-              if (settings.haptics) {
-                await onImpact();
-              }
-              ppBottomSheetRef.current?.present();
-            }}
-            style={styles.clickable_text}
-          >
-            Umgaqo-nkqubo woBucala
-          </Text>{" "}
-          yale app.
-        </Text>
-      )}
-    </View>
+      </View>
+    </>
   );
 };
 

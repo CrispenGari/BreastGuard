@@ -148,7 +148,7 @@ const Page = () => {
         </View>
 
         <Button
-          title={"Getting Started"}
+          title={isLastSlide ? "Getting Started" : "Next"}
           style={{ width: "100%", marginVertical: 20 }}
           onPress={() => {
             if (isLastSlide) {

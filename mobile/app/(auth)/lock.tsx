@@ -33,7 +33,6 @@ const Page = () => {
         useNativeDriver: true,
       }),
     ]).start();
-
     if (!settings.lock) {
       router.replace({
         pathname: "/(tabs)/home",
@@ -64,6 +63,7 @@ const Page = () => {
         flex: 1,
         backgroundColor: COLORS.main,
       }}
+      blurRadius={80}
     >
       <SafeAreaView
         style={{
@@ -77,7 +77,6 @@ const Page = () => {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: COLORS.white,
             borderRadius: 10,
             padding: 10,
             transform: [{ scale }],
@@ -98,6 +97,7 @@ const Page = () => {
               fontSize: 25,
               color: COLORS.black,
               transform: [{ scale }],
+              marginTop: 10,
             }}
           >
             {APP_NAME}
@@ -122,14 +122,14 @@ const Page = () => {
               justifyContent: "center",
               alignItems: "center",
               flexDirection: "row",
-              flex: 1,
               gap: 20,
+              height: 55,
             }}
             start={{ x: 0, y: 0 }}
           >
             <MaterialCommunityIcons
               name="fingerprint"
-              size={24}
+              size={28}
               color={COLORS.white}
             />
             <Text

@@ -1,4 +1,4 @@
-import { COLORS, FONTS } from "@/src/constants";
+import { APP_NAME, COLORS, FONTS } from "@/src/constants";
 import { useSettingsStore } from "@/src/store/settingsStore";
 import { onImpact } from "@/src/utils";
 import { Ionicons } from "@expo/vector-icons";
@@ -10,15 +10,103 @@ import {
 } from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import Button from "../Button/Button";
+import {
+  Alert,
+  Platform,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Footer from "../Footer/Footer";
+import useLocalAuthState from "@/src/hooks/useLocalAuthState";
+import * as LocalAuthentication from "expo-local-authentication";
+import Button from "../Button/Button";
+
 const GettingStartedBottomSheet = React.forwardRef<BottomSheetModal, {}>(
   ({}, ref) => {
     const snapPoints = React.useMemo(() => ["40%"], []);
     const { dismiss } = useBottomSheetModal();
-    const { settings } = useSettingsStore();
+    const { settings, update } = useSettingsStore();
+    const [value, setValue] = React.useState(false);
+    const { hasHadWare, isEnrolled } = useLocalAuthState();
     const router = useRouter();
+
+    const lockApp = async () => {
+      if (settings.haptics) {
+        await onImpact();
+      }
+
+      if (!hasHadWare || !isEnrolled)
+        return Alert.alert(
+          APP_NAME,
+          `Make sure that local authentication is enabled for ${APP_NAME}.`,
+          [
+            {
+              text: "SKIP",
+              style: "default",
+              onPress: async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                update({ ...settings, new: false });
+                router.replace({ pathname: "/(tabs)/home" });
+              },
+            },
+            {
+              text: "OK",
+              style: "cancel",
+              onPress: async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+              },
+            },
+          ],
+          { cancelable: false },
+        );
+
+      const { success } = await LocalAuthentication.authenticateAsync({
+        disableDeviceFallback: true,
+        biometricsSecurityLevel: "strong",
+        cancelLabel: "CANCEL",
+        promptMessage: `Test your Biometrics or PIN before locking ${APP_NAME}.`,
+        requireConfirmation: true,
+      });
+      if (success) {
+        update({ ...settings, lock: !settings.lock, new: false });
+        router.replace({ pathname: "/(tabs)/home" });
+      } else {
+        setValue(false);
+        return Alert.alert(
+          APP_NAME,
+          `Failed to lock ${APP_NAME}.`,
+          [
+            {
+              text: "SKIP",
+              style: "default",
+              onPress: async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                router.replace({ pathname: "/(tabs)/home" });
+              },
+            },
+            {
+              text: "TRY AGAIN",
+              style: "cancel",
+              onPress: async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+              },
+            },
+          ],
+          { cancelable: false },
+        );
+      }
+    };
+
     return (
       <BottomSheetModal
         ref={ref}
@@ -80,30 +168,79 @@ const GettingStartedBottomSheet = React.forwardRef<BottomSheetModal, {}>(
                 marginBottom: 20,
               }}
             >
-              {settings.language === "en" ? "Getting Started" : "Ukuqalisa"}
+              Getting Started
             </Text>
 
             <View style={{ marginVertical: 20, gap: 20 }}>
-              <Button
-                title={settings.language === "en" ? "Login" : "Ngena"}
-                style={{ width: "100%", borderWidth: 2 }}
-                onPress={() =>
-                  router.replace({
-                    pathname: "/(tabs)/home",
-                  })
-                }
-              />
-              <Button
-                title={settings.language === "en" ? "Register" : "Bhalisa"}
-                style={{ width: "100%", borderWidth: 2 }}
-                onPress={() =>
-                  router.replace({
-                    pathname: "/(tabs)/home",
-                  })
-                }
-                variant="outline"
-                titleStyle={{ fontWeight: "600", color: COLORS.black }}
-              />
+              <Text
+                style={{
+                  fontFamily: FONTS.regular,
+                  fontSize: 16,
+                  textAlign: "center",
+                }}
+              >
+                You can lock your "{APP_NAME}" with biometrics, passcode or PIN.
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                  width: "100%",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: FONTS.bold,
+                    fontSize: 16,
+                    width: 80,
+                    textAlign: "center",
+                  }}
+                >
+                  {value ? "Lock" : "Unlock"}
+                </Text>
+
+                <Switch
+                  style={{
+                    width: 60,
+                    height: 40,
+                    padding: 5,
+                    transform: Platform.select({
+                      android: [{ scaleX: 1.5 }, { scaleY: 1.5 }],
+                      ios: [{ scaleX: 1 }, { scaleY: 1 }],
+                    }),
+                  }}
+                  thumbColor={COLORS.primary}
+                  value={value}
+                  trackColor={{
+                    false: COLORS.main,
+                    true: COLORS.secondary,
+                  }}
+                  onValueChange={async (value) => {
+                    setValue(value);
+                    if (value) {
+                      await lockApp();
+                    }
+                  }}
+                />
+              </View>
+
+              <View style={{ marginVertical: 20, gap: 20 }}>
+                <Button
+                  title={"Not Now"}
+                  style={{ width: "100%", borderWidth: 2 }}
+                  onPress={() => {
+                    update({
+                      ...settings,
+                      new: false,
+                    });
+                    router.replace({
+                      pathname: "/(tabs)/home",
+                    });
+                  }}
+                />
+              </View>
             </View>
           </View>
           <Footer />

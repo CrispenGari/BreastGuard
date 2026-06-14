@@ -3,6 +3,25 @@ import * as Haptics from "expo-haptics";
 import * as StoreReview from "expo-store-review";
 import * as Updates from "expo-updates";
 import { Alert } from "react-native";
+import { ReactNativeFile } from "apollo-upload-client";
+import * as rnMimeTypes from "react-native-mime-types";
+
+export const generateRNFile = ({
+  uri,
+  name,
+}: {
+  uri: string;
+  name: string;
+}) => {
+  return uri
+    ? new ReactNativeFile({
+        uri,
+        type: rnMimeTypes.lookup(uri) || "image",
+        name,
+      })
+    : null;
+};
+
 export const onImpact = async () =>
   await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 

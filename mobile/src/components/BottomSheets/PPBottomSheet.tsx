@@ -5,11 +5,13 @@ import { Ionicons } from "@expo/vector-icons";
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
+  BottomSheetScrollView,
   BottomSheetView,
   useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import * as Constants from "expo-constants";
 
 const PPBottomSheet = React.forwardRef<BottomSheetModal, {}>(({}, ref) => {
   const snapPoints = React.useMemo(() => ["60%"], []);
@@ -32,105 +34,119 @@ const PPBottomSheet = React.forwardRef<BottomSheetModal, {}>(({}, ref) => {
         />
       )}
     >
-      <BottomSheetView
-        style={{
-          flex: 1,
-          padding: 10,
+      <BottomSheetScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          padding: 20,
           paddingBottom: 100,
         }}
+        stickyHeaderIndices={[0]}
+        stickyHeaderHiddenOnScroll
+        StickyHeaderComponent={(props) => (
+          <View
+            style={{
+              paddingTop: 50,
+              paddingBottom: 10,
+              justifyContent: "space-between",
+              flexDirection: "row",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: FONTS.bold,
+                marginBottom: 10,
+              }}
+            >
+              Privacy Policy
+            </Text>
+            <TouchableOpacity
+              style={{
+                width: 30,
+                height: 30,
+                backgroundColor: COLORS.main,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 30,
+              }}
+              hitSlop={20}
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                dismiss();
+              }}
+            >
+              <Ionicons name="close" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        )}
       >
-        <View
+        <Text
           style={{
-            alignSelf: "flex-end",
-            paddingHorizontal: 20,
-            paddingTop: 10,
+            fontSize: 20,
+            fontFamily: FONTS.bold,
+            marginBottom: 10,
+            color: COLORS.transparent,
           }}
         >
-          <TouchableOpacity
-            style={{
-              width: 30,
-              height: 30,
-              backgroundColor: COLORS.main,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 30,
-            }}
-            hitSlop={20}
-            onPress={async () => {
-              if (settings.haptics) {
-                await onImpact();
-              }
-              dismiss();
-            }}
-          >
-            <Ionicons name="close" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
+          Privacy Policy
+        </Text>
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            padding: 20,
-            paddingBottom: 60,
+        <Text
+          style={{
+            fontFamily: FONTS.regular,
+            fontSize: 18,
+            lineHeight: 26,
           }}
         >
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: FONTS.bold,
-              marginBottom: 10,
-            }}
-          >
-            {settings.language === "en"
-              ? "Privacy Policy"
-              : "Umgaqo-nkqubo woBucala"}
-          </Text>
-
-          <Text
-            style={{
-              fontFamily: FONTS.regular,
-              fontSize: 18,
-              lineHeight: 26,
-            }}
-          >
-            Your privacy matters to us. iLifaCode is designed to support
-            inclusive Computer Science learning in English and isiXhosa while
-            respecting and protecting your personal information.
-            {"\n\n"}
-            iLifaCode may collect limited information needed for core app
-            functionality, such as your selected language, saved terms, lesson
-            progress, quiz activity, and basic usage information used to improve
-            the learning experience.
-            {"\n\n"}
-            The app may allow learners, educators, translators, and reviewers to
-            contribute or suggest computing terms, definitions, examples, and
-            learning resources. Any submitted content may be reviewed before it
-            is published to help maintain accuracy, quality, and cultural
-            relevance.
-            {"\n\n"}
-            iLifaCode does not sell, rent, or trade your personal information.
-            Information is only used to support app functionality, improve
-            learning resources, manage contributions, protect the platform, and
-            provide a better user experience.
-            {"\n\n"}
-            Some learning content may be stored offline on your device so that
-            you can access glossary terms, lessons, flashcards, or quizzes in
-            low-connectivity environments.
-            {"\n\n"}
-            If authentication is enabled, sign-in may be handled securely
-            through trusted providers or institutional accounts. iLifaCode does
-            not store your external account password or login credentials.
-            {"\n\n"}
-            We aim to protect stored data using reasonable security measures.
-            You remain in control of your information and may request access to,
-            correction of, or deletion of your personal data where applicable.
-            {"\n\n"}
-            By using iLifaCode, you agree to this Privacy Policy. This policy
-            may be updated from time to time to reflect improvements to the app,
-            changes in services, or legal requirements.
-          </Text>
-        </ScrollView>
-      </BottomSheetView>
+          Your privacy matters to us. BreastGuard is designed to support
+          mobile-based breast cancer image classification while respecting and
+          protecting your information.
+          {"\n\n"}
+          BreastGuard may process images that you capture or upload in order to
+          classify them as benign or malignant. These images are used only to
+          generate AI-powered predictions and confidence scores within the app.
+          {"\n\n"}
+          The app may collect limited information needed for core functionality,
+          such as uploaded image details, prediction results, confidence scores,
+          and basic usage information used to improve the app experience.
+          {"\n\n"}
+          BreastGuard does not sell, rent, or trade your personal information.
+          Any information processed by the app is used only to support
+          prediction services, improve system performance, protect the platform,
+          and provide a better user experience.
+          {"\n\n"}
+          BreastGuard does not require user authentication. The app does not
+          collect or store passwords, login credentials, or external account
+          details.
+          {"\n\n"}
+          We aim to protect stored and processed data using reasonable security
+          measures. You remain in control of the images you choose to upload and
+          should avoid uploading images that contain private, identifiable, or
+          unrelated personal information.
+          {"\n\n"}
+          BreastGuard is intended to support breast cancer screening research
+          and educational decision-support use. It does not replace professional
+          medical advice, clinical diagnosis, biopsy, laboratory testing, or
+          consultation with qualified healthcare professionals.
+          {"\n\n"}
+          By using BreastGuard, you agree to this Privacy Policy. This policy
+          may be updated from time to time to reflect improvements to the app,
+          changes in services, or legal requirements.
+        </Text>
+        <Text
+          style={{
+            color: COLORS.secondary,
+            fontFamily: FONTS.regular,
+            marginTop: 50,
+            textAlign: "center",
+          }}
+        >
+          {Constants.default.expoConfig?.name} • Version:{" "}
+          {Constants.default.expoConfig?.version}
+        </Text>
+      </BottomSheetScrollView>
     </BottomSheetModal>
   );
 });

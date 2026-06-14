@@ -1,19 +1,17 @@
 import { APP_NAME, COLORS, FONTS, IMAGES } from "@/src/constants";
 import { useSettingsStore } from "@/src/store/settingsStore";
-import { onImpact } from "@/src/utils";
 
 import { useRouter } from "expo-router";
 import React from "react";
 import { Animated, ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 const Page = () => {
   const scale = React.useRef(new Animated.Value(0.5)).current;
   const opacity = React.useRef(new Animated.Value(0.5)).current;
+  const { settings } = useSettingsStore();
 
   const router = useRouter();
 
-  const { settings } = useSettingsStore();
   React.useEffect(() => {
     Animated.parallel([
       Animated.spring(scale, {
@@ -35,7 +33,7 @@ const Page = () => {
         });
       } else {
         router.replace({
-          pathname: "/(auth)/lock",
+          pathname: "/(auth)/landing",
         });
       }
     }, 3000);

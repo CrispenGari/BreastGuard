@@ -5,11 +5,13 @@ import { Ionicons } from "@expo/vector-icons";
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
+  BottomSheetScrollView,
   BottomSheetView,
   useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import * as Constants from "expo-constants";
 
 const TCBottomSheet = React.forwardRef<BottomSheetModal, {}>(({}, ref) => {
   const snapPoints = React.useMemo(() => ["60%"], []);
@@ -32,123 +34,119 @@ const TCBottomSheet = React.forwardRef<BottomSheetModal, {}>(({}, ref) => {
         />
       )}
     >
-      <BottomSheetView
-        style={{
-          flex: 1,
-          padding: 10,
+      <BottomSheetScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          padding: 20,
           paddingBottom: 100,
         }}
+        stickyHeaderIndices={[0]}
+        stickyHeaderHiddenOnScroll
+        StickyHeaderComponent={(props) => (
+          <View
+            style={{
+              paddingTop: 50,
+              paddingBottom: 10,
+              justifyContent: "space-between",
+              flexDirection: "row",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: FONTS.bold,
+                marginBottom: 10,
+              }}
+            >
+              Terms & Conditions
+            </Text>
+            <TouchableOpacity
+              style={{
+                width: 30,
+                height: 30,
+                backgroundColor: COLORS.main,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 30,
+              }}
+              hitSlop={20}
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                dismiss();
+              }}
+            >
+              <Ionicons name="close" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        )}
       >
-        <View
+        <Text
           style={{
-            alignSelf: "flex-end",
-            paddingHorizontal: 20,
-            paddingTop: 10,
+            fontSize: 20,
+            fontFamily: FONTS.bold,
+            marginBottom: 10,
+            color: COLORS.transparent,
           }}
         >
-          <TouchableOpacity
-            style={{
-              width: 30,
-              height: 30,
-              backgroundColor: COLORS.main,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 30,
-            }}
-            hitSlop={20}
-            onPress={async () => {
-              if (settings.haptics) {
-                await onImpact();
-              }
-              dismiss();
-            }}
-          >
-            <Ionicons name="close" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            padding: 20,
-            paddingBottom: 60,
+          Terms & Conditions
+        </Text>
+        <Text
+          style={{
+            fontFamily: FONTS.regular,
+            fontSize: 18,
+            lineHeight: 26,
           }}
         >
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: FONTS.bold,
-              marginBottom: 10,
-            }}
-          >
-            Terms & Conditions
-          </Text>
-
-          <Text
-            style={{
-              fontFamily: FONTS.regular,
-              fontSize: 18,
-              lineHeight: 26,
-            }}
-          >
-            iLifaCode is a bilingual Computer Science learning application
-            designed to support access to computing concepts, digital literacy
-            resources, and isiXhosa terminology development.
-            {"\n\n"}
-            By using iLifaCode, you agree to use the app responsibly,
-            respectfully, and for educational purposes. The app is intended to
-            support learning and should not be used to share harmful,
-            misleading, offensive, or unlawful content.
-            {"\n\n"}
-            iLifaCode provides glossary terms, short lessons, flashcards,
-            quizzes, and open educational resources to help learners understand
-            computing concepts in English and isiXhosa. While we aim to provide
-            accurate and useful content, some terminology, translations, and
-            explanations may still require review by language experts,
-            educators, or Computer Science specialists.
-            {"\n\n"}
-            Users who contribute terms, definitions, examples, translations, or
-            learning resources are responsible for ensuring that their
-            submissions are accurate, respectful, original, and suitable for
-            educational use.
-            {"\n\n"}
-            Submitted content may be reviewed, edited, approved, rejected, or
-            removed to maintain quality, technical accuracy, linguistic
-            correctness, cultural relevance, and platform safety.
-            {"\n\n"}
-            You may not use iLifaCode to upload or distribute content that
-            infringes copyright, violates privacy, promotes discrimination,
-            contains harmful material, or disrupts the operation of the
-            platform.
-            {"\n\n"}
-            Some learning materials may be made available offline to support
-            access in low-connectivity environments. Offline access is provided
-            for learning convenience and does not grant ownership of the app,
-            platform, or protected content.
-            {"\n\n"}
-            Open educational resources shared through iLifaCode may be subject
-            to specific licences, such as Creative Commons licences. Users are
-            responsible for respecting the licence terms attached to each
-            resource, including attribution and reuse conditions where
-            applicable.
-            {"\n\n"}
-            iLifaCode does not guarantee that all content will be error-free,
-            complete, or suitable for every learning context. Learners and
-            educators should use the app as a support tool alongside formal
-            teaching, institutional guidance, and expert-reviewed materials.
-            {"\n\n"}
-            We reserve the right to suspend, restrict, or terminate access to
-            the app if these Terms & Conditions are violated or if use of the
-            platform creates risk for other users, contributors, institutions,
-            or the service.
-            {"\n\n"}
-            By continuing to use iLifaCode, you agree to these Terms &
-            Conditions. These terms may be updated from time to time to reflect
-            improvements to the app, changes in services, legal requirements, or
-            platform policies.
-          </Text>
-        </ScrollView>
-      </BottomSheetView>
+          BreastGuard is a mobile-based AI decision-support application designed
+          to support breast cancer image classification using AI-powered image
+          analysis.
+          {"\n\n"}
+          By using BreastGuard, you agree to use the app responsibly and only
+          for educational, research, screening-support, or decision-support
+          purposes. The app should not be used to upload harmful, misleading,
+          offensive, unlawful, or unrelated content.
+          {"\n\n"}
+          BreastGuard allows users to capture or upload breast cancer images for
+          classification. The system analyzes the uploaded image and predicts
+          whether the image is likely benign or malignant.
+          {"\n\n"}
+          The predictions and confidence scores provided by BreastGuard are
+          intended to support decision-making and learning. They should not be
+          treated as final medical diagnosis or professional clinical advice.
+          {"\n\n"}
+          Users remain responsible for how they interpret and use the results
+          provided by the app. If there are any medical concerns, symptoms,
+          abnormal findings, or uncertainty, users should consult qualified
+          healthcare professionals for proper clinical assessment, diagnosis,
+          and treatment.
+          {"\n\n"}
+          BreastGuard does not guarantee that all predictions will be correct,
+          complete, or suitable for every clinical situation. Model performance
+          may be affected by image quality, lighting, resolution, image
+          artifacts, dataset limitations, and visual similarity between benign
+          and malignant cases.
+          {"\n\n"}
+          You may not use BreastGuard to upload images that infringe copyright,
+          violate privacy, contain harmful material, expose personal or
+          identifiable information, or disrupt the operation of the platform or
+          backend service.
+          {"\n\n"}
+          BreastGuard does not require user authentication. However, users are
+          expected to use the app in a lawful and respectful manner and avoid
+          uploading private, personal, identifiable, or unrelated images.
+          {"\n\n"}
+          We reserve the right to restrict, suspend, or modify access to the app
+          or its services if misuse, abuse, technical risk, or violation of
+          these Terms & Conditions is identified.
+          {"\n\n"}
+          By continuing to use BreastGuard, you agree to these Terms &
+          Conditions. These terms may be updated from time to time to reflect
+          improvements to the app, changes in services, legal requirements, or
+          platform policies.
+        </Text>
+      </BottomSheetScrollView>
     </BottomSheetModal>
   );
 });

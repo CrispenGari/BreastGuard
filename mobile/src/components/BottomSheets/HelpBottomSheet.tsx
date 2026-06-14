@@ -5,11 +5,13 @@ import { Ionicons } from "@expo/vector-icons";
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
+  BottomSheetScrollView,
   BottomSheetView,
   useBottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import * as Constants from "expo-constants";
 
 const HelpBottomSheet = React.forwardRef<BottomSheetModal, {}>(({}, ref) => {
   const snapPoints = React.useMemo(() => ["50%"], []);
@@ -32,78 +34,99 @@ const HelpBottomSheet = React.forwardRef<BottomSheetModal, {}>(({}, ref) => {
         />
       )}
     >
-      <BottomSheetView
-        style={{
-          flex: 1,
-          padding: 10,
+      <BottomSheetScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          padding: 20,
           paddingBottom: 100,
         }}
+        stickyHeaderIndices={[0]}
+        stickyHeaderHiddenOnScroll
+        StickyHeaderComponent={(props) => (
+          <View
+            style={{
+              paddingTop: 50,
+              paddingBottom: 10,
+              justifyContent: "space-between",
+              flexDirection: "row",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: FONTS.bold,
+                marginBottom: 10,
+              }}
+            >
+              Help
+            </Text>
+            <TouchableOpacity
+              style={{
+                width: 30,
+                height: 30,
+                backgroundColor: COLORS.main,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 30,
+              }}
+              hitSlop={20}
+              onPress={async () => {
+                if (settings.haptics) {
+                  await onImpact();
+                }
+                dismiss();
+              }}
+            >
+              <Ionicons name="close" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        )}
       >
-        <View
+        <Text
           style={{
-            alignSelf: "flex-end",
-            paddingHorizontal: 20,
-            paddingTop: 10,
+            fontSize: 20,
+            fontFamily: FONTS.bold,
+            marginBottom: 10,
           }}
         >
-          <TouchableOpacity
-            style={{
-              width: 30,
-              height: 30,
-              backgroundColor: COLORS.main,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 30,
-            }}
-            hitSlop={20}
-            onPress={async () => {
-              if (settings.haptics) {
-                await onImpact();
-              }
-              dismiss();
-            }}
-          >
-            <Ionicons name="close" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ padding: 20 }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: FONTS.bold,
-              marginBottom: 10,
-            }}
-          >
-            Help
-          </Text>
-
-          <Text
-            style={{
-              fontFamily: FONTS.regular,
-              fontSize: 18,
-            }}
-          >
-            iLifaCode is a bilingual Computer Science learning app created to
-            help learners understand common computing concepts in both English
-            and isiXhosa.
-            {"\n\n"}The app allows you to explore key digital terms, read simple
-            explanations, and learn how words such as computer, internet,
-            software, password, database, and network are used in everyday
-            computing.
-            {"\n\n"}You can study short lessons, practise with flashcards, and
-            test your understanding through quizzes designed to support beginner
-            learners and digital literacy development.
-            {"\n\n"}iLifaCode also supports isiXhosa terminology development by
-            making computing knowledge more accessible, culturally relevant, and
-            easier to understand for learners, educators, translators, and
-            communities.
-            {"\n\n"}Some learning content can be made available offline to
-            support access in low-connectivity environments. iLifaCode helps you
-            learn Computer Science at your own pace, wherever you are.
-          </Text>
-        </View>
-      </BottomSheetView>
+          Help
+        </Text>
+        <Text
+          style={{
+            fontFamily: FONTS.regular,
+            fontSize: 18,
+          }}
+        >
+          BreastGuard is a mobile-based AI decision-support app created to help
+          users classify breast cancer images as benign or malignant using deep
+          learning.
+          {"\n\n"}The app allows you to capture or upload a breast cancer image
+          and receive an AI-powered prediction. It uses a trained breast cancer
+          classification model to analyze the image and provide a predicted
+          class, indicating whether the image is likely benign or malignant.
+          {"\n\n"}BreastGuard also provides prediction confidence scores to help
+          users understand how certain the model is about its result.
+          {"\n\n"}The system is designed to support students, researchers,
+          healthcare learners, and medical decision-support experiments by
+          making breast cancer image classification faster, more accessible, and
+          easier to use through a mobile device.
+          {"\n\n"}BreastGuard is intended to support breast cancer screening
+          research and educational decision-making, but it does not replace
+          professional medical advice, clinical diagnosis, biopsy, laboratory
+          testing, or consultation with qualified healthcare professionals.
+        </Text>
+        <Text
+          style={{
+            color: COLORS.secondary,
+            fontFamily: FONTS.regular,
+            marginTop: 50,
+            textAlign: "center",
+          }}
+        >
+          {Constants.default.expoConfig?.name} • Version:{" "}
+          {Constants.default.expoConfig?.version}
+        </Text>
+      </BottomSheetScrollView>
     </BottomSheetModal>
   );
 });

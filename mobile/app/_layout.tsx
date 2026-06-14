@@ -12,6 +12,7 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { LogBox, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import ReactQueryProvider from "@/src/providers/ReactQueryProvider/ReactQueryProvider";
 LogBox.ignoreLogs;
 LogBox.ignoreAllLogs();
 SplashScreen.preventAutoHideAsync();
@@ -58,11 +59,17 @@ const Layout = () => {
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <StatusBar style="light" />
 
-      <GestureHandlerRootView>
-        <BottomSheetModalProvider>
-          <RootLayout />
-        </BottomSheetModalProvider>
-      </GestureHandlerRootView>
+      <ReactQueryProvider>
+        <GestureHandlerRootView
+          style={{
+            flex: 1,
+          }}
+        >
+          <BottomSheetModalProvider>
+            <RootLayout />
+          </BottomSheetModalProvider>
+        </GestureHandlerRootView>
+      </ReactQueryProvider>
     </View>
   );
 };
@@ -75,9 +82,7 @@ const RootLayout = () => {
       (_notification) => {},
     );
     const responseListener =
-      Notifications.addNotificationResponseReceivedListener((_response) => {
-        //  Do stuff here
-      });
+      Notifications.addNotificationResponseReceivedListener((_response) => {});
     return () => {
       responseListener.remove();
       notificationListener.remove();
@@ -88,6 +93,7 @@ const RootLayout = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(common)" options={{ headerShown: false }} />
     </Stack>
   );
 };

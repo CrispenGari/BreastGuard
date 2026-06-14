@@ -16,7 +16,12 @@
         "backgroundColor": "#FBFBFB"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.crispengari.breastguard"
     },
     "plugins": [
       "expo-router",
@@ -32,11 +37,19 @@
           }
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-audio",
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "bab324f4-25bc-4488-b446-9a0d5cd4b157"
+      }
     }
   }
 }

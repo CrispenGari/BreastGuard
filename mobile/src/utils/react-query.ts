@@ -2,7 +2,7 @@ import { ReactNativeFile } from "apollo-upload-client";
 import { SERVER_BASE_URL } from "../constants";
 import { TInferenceResponse } from "../types";
 
-export const predictCropDiseaseMutation = async ({
+export const predictCancerMutation = async ({
   image,
 }: {
   image: ReactNativeFile;
