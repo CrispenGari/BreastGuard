@@ -1,6 +1,7 @@
 from fastapi import APIRouter, File
 from fastapi.responses import JSONResponse
 from typing import Annotated
+from uuid import uuid4
 from models import (
     mobilenetv3,
     predict_cancer,
@@ -22,6 +23,7 @@ def predict_tb_(image: Annotated[bytes, File()]):
                 "status": "ok",
                 "prediction": prediction,
                 "model": "mobilenetv3",
+                "id": str(uuid4())
             },
             status_code=200,
         )
@@ -33,6 +35,7 @@ def predict_tb_(image: Annotated[bytes, File()]):
                 "field": "server",
                 "status": "error",
                 "message": "Internal Server Error.",
+                 "id": str(uuid4())
             },
             status_code=500,
         )

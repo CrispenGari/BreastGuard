@@ -42,6 +42,7 @@ The best-performing model is intended for integration into a mobile health (**mH
 - [Future Work](#future-work)
 - [Summary](#summary)
 - [Notebooks](#notebooks)
+- [Server Deployment](#server-deployment)
 - [References](#references)
 - [Author](#author)
 
@@ -344,6 +345,12 @@ You can read the summary of findings in the [`SUMMARY.md`](/SUMMARY.md)
 ### Notebooks
 
 The notebook for training and running experiments can be found in the [`notebooks`](/notebooks/)
+
+### Server Deployment
+
+The `BreastGaud` server will be deployed and hosted on free instance of [render.com]() and the base url of the API is:
+
+> https://breastguard-c58x.onrender.com
 
 ### References
 

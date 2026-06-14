@@ -1,23 +1,21 @@
-export type TModel = "mobilenetv3" | "resnet50" | "densenet201";
-export type TStatus = "ok" | "error";
+export type THistory = {
+  prediction: TInferenceResponse;
+} & {
+  id: string;
+  date: Date;
+  uri: string;
+};
 
 export interface TPrediction {
   label: number;
   class_label: string;
   probability: number;
 }
-
-export interface TPredictionResponse {
+export interface TInferenceResponse {
   time: number;
   ok: boolean;
-  status: TStatus;
+  status: string;
   prediction: TPrediction;
-  model: TModel;
-}
-export type THistory = {
+  model: string;
   id: string;
-  date: Date;
-  prediction: TPredictionResponse;
-  xray: string;
-  image: string;
-};
+}

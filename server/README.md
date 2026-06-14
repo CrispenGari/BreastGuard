@@ -24,7 +24,8 @@ The following is an example of the expected API response.
     "class_label": "malignant",
     "probability": 0.9876
   },
-  "model": "mobilenetv3"
+  "model": "mobilenetv3",
+  "id": "123e4567-e89b-12d3-a456-426614174000"
 }
 ```
 

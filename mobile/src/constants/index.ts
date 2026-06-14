@@ -1,3 +1,6 @@
+export const SERVER_BASE_URL =
+  "https://breastguard-c58x.onrender.com/api/v1/cancer";
+
 export const COLORS = {
   main: "#9CB080",
   primary: "#618764",
